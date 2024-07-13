@@ -1,0 +1,349 @@
+<!--
+=========================================================
+* Argon Dashboard 2 - v2.0.4
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    NJ Valdez | Alumni
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="/staticassets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="/static/assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+</head>
+
+<body class="">
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+      <div class="col-12">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
+          <div class="container-fluid">
+            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="/">
+              NJ Valdez Colleges Foundation
+            </a>
+            <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon mt-2">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navigation">
+              <ul class="navbar-nav mx-auto">
+
+                {% if request.user.is_authenticated %}
+
+                <li class="nav-item">
+                    <a href="" class="btn btn-md mb-0 me-2 mb-1 btn-primary" data-bs-toggle="modal" data-bs-target="#modal-job"> <i class="fas fa-upload opacity-6 text-white me-1"></i>
+                      Post a Job</a>
+                </li>
+
+                <li class="nav-item">
+                  
+                    <a href="" class="btn btn-md mb-0 me-2 btn-primary" data-bs-toggle="modal" data-bs-target="#modal-request"> <i class="fas fa-paper-plane opacity-6 text-white me-1"></i>
+                      Request Document</a>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'register' %}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Register Account
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'login' %}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Login
+                  </a>
+                </li>
+
+                {% endif %}
+
+
+              </ul>
+              <ul class="navbar-nav d-lg-block">
+                {% if request.user.is_authenticated %}
+
+                <li class="nav-item">
+                  <a href="{% url 'alumni-profile' %}" target="_blank" class="text-secondary me-xl-4 me-4">
+                      
+                      <i class="fas fa-user opacity-6 text-dark me-1"></i>
+                      {{ request.user }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-secondary me-xl-4 me-4">
+                      
+                        <i class="fa fa-sign-out opacity-6 text-dark me-1"></i>
+                        Sign Out
+                    </a>
+
+              </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
+                        <span class="text-lg fab fa-facebook"></span>
+                      </a>
+                      <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
+                        <span class="text-lg fab fa-twitter"></span>
+                      </a>
+                      <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
+                        <span class="text-lg fab fa-instagram"></span>
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- End Navbar -->
+      </div>
+    </div>
+  </div>
+  <main class="main-content mt-6">
+    <section class="container">
+
+        <div class="row mt-6">
+            <div class="col-md-4">
+                <div class="card card-profile">
+                  <img src="/static/assets/img/nj_banner.jpg" alt="Image placeholder" class="card-img-top">
+                  <div class="row justify-content-center">
+                    <div class="col-4 col-lg-4 order-lg-2">
+                      <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
+                        <a href="javascript:;">
+                          <img src="{{ alumni.avatar.url }}" class="rounded-circle img-fluid border border-2 border-white">
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body pt-0">
+    
+                    <div class="text-center mt-4">
+                      <h5 class="text-capitalize">
+                        {{ alumni.user.first_name  }} {{ alumni.user.last_name}}</span>
+                      </h5>
+                      <div class="h6 mt-4 text-capitalize">
+                        {{ alumni.course }}
+                      </div>
+                      <div>
+                        Batch: {{ alumni.batch }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+    
+          <div class="col-md-8">
+
+
+            
+            <div class="card">
+                <div class="card-header pb-0 px-3">
+                    <div class="row">
+                       <div class="col-md-6">
+                        <p class="text-uppercase text-sm mb-0">Requested Documents</p>
+                       </div>
+            
+                    </div>
+                 </div>
+
+              <div class="card-body">
+                <ul class="list-group">
+                    {% if requests %}
+                    {% for r in requests %}
+                    <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                       <div class="d-flex align-items-center">
+                          <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 btn-sm d-flex align-items-center justify-content-center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+                          <div class="d-flex flex-column">
+                             <h6 class="mb-1 text-dark text-sm">{{ r.file_type }}</h6>
+                             <span class="text-xs">{{ r.date_updated }}</span>
+                          </div>
+                       </div>
+                       {% if r.status == 'Pending' %}
+                       <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">
+                          {{ r.status }}
+                       </div>
+                       {% elif r.status == 'Complete' %}
+
+                       <a href="{{ r.file.url }}" target="_blank" class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="fas fa-download text-lg me-1" aria-hidden="true"></i> Download </a>
+                       {% endif %}
+                    </li>
+                    {% endfor %}
+                    {% else %}
+
+                    Request to get your Diploma or Transcript of Record
+                    {% endif %}
+        
+                 </ul>
+
+                 <hr class="dark horizontal">
+
+                <p class="text-uppercase text-sm">User Information</p>
+                <div class="row">
+                    <form action="{% url 'edit-avatar' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="d-flex align-items-center">
+                        
+                        <div class="form-group">
+                            <label for="example-text-input" class="form-control-label">Edit Profile</label>
+                            <input class="form-control" type="file" name="avatar" required id="example-text-input" accept="image/*">
+                        </div>
+    
+    
+                        <button type="submit" class="btn btn-primary btn-sm ms-auto">Save</button>
+                        
+                        </div>
+                    </form>
+
+                </div>
+                <hr class="horizontal dark">
+    
+              </div>
+            </div>
+          </div>
+    
+        </div>
+        
+    </section>
+  </main>
+
+  <!-- Modals -->
+
+  <div class="col-md-4">
+    <div class="modal fade" id="modal-job" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+      <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title" id="modal-title-notification">Post a Job</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+            <form action="{% url 'post-job' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Sector</label>
+                                <select class="form-control" name="sector" id="exampleFormControlSelect1">
+                                  <option value="Government">Government</option>
+                                  <option value="Non-Government">Non-Government</option>
+                                </select>
+                              </div>
+
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Company Name</label>
+                                <input class="form-control"  name="company_name" required type="text" id="example-text-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Company Email</label>
+                                <input class="form-control" name="company_email" required type="email" id="example-text-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Job Title</label>
+                                <input class="form-control" name="job_title" required type="text" id="example-text-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Job Description</label>
+                                <textarea class="form-control" name="description" required id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                        
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-white">Post Job</button>
+                    <button type="button" class="btn text-danger ml-auto" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="modal fade" id="modal-request" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+      <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title" id="modal-title-notification">Request Document </h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <form action="{% url 'request-file' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Document</label>
+                        <select class="form-control" name="request_" id="exampleFormControlSelect1">
+                          <option value="Diploma">Diploma</option>
+                          <option value="Transcript of Records">Transcript of Record</option>
+                        </select>
+                      </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Please state your reason</label>
+                        <textarea class="form-control" name="reason" required id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-white">Send request</button>
+                <button type="button" class="btn text-danger ml-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--   Core JS Files   -->
+
+  {% include 'includes/scripts.html' %}
+</body>
+
+</html>

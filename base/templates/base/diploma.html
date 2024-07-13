@@ -1,0 +1,240 @@
+{% extends 'base2.html' %}
+
+{% block stylesheet %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="row mt-4">
+
+    <div class="col-lg-12 mb-lg-0 mb-4">
+        <div class="card">
+            <div class="card-header pb-0 p-3 mb-3">
+                <div class="row">
+                    <div class="d-flex align-items-center justify-content-between">
+                    <h6 class="mb-0">Alumni Requests</h6>
+
+                    <a href="" class="btn btn-md bg-gradient-info">Approved requests</a>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="table-responsive p-2">
+              <table class="table align-items-center mb-0" id="alumni_table">
+                <thead>
+                  <tr>
+
+                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Alumni</th>
+                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">File request</th>
+                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">Contact</th>
+                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">Course</th>
+                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Date requested</th>
+                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Status</th>
+                    <th class="text-secondary opacity-7"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for alm in diploma %}
+                  <tr>
+
+                    <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="{{ alm.alumni.avatar.url }}" class="avatar avatar-sm me-3">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <a href=""><p class="mb-0 text-md text-capitalize">{{ alm.alumni.user.last_name }}, {{ alm.alumni.user.first_name}} ( {{ alm.alumni.student_number }})</p></a>
+                          </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <p class="text-md font-weight-bold mb-0 text-capitalize">{{ alm.file_type }}</p>
+                    </td>
+
+                    
+
+
+
+                    <td>
+                        <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ alm.alumni.phone_number }}</p>
+                        <p class="text-sm text-secondary mb-0">{{ alm.alumni.user.email }}</p>
+                    </td>
+
+                    <td>
+                      <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ alm.alumni.course }}</p>
+                      <p class="text-sm text-secondary mb-0">Batch: {{ alm.alumni.batch }}</p>
+                    </td>
+
+
+                    <td class="text-center">
+                        <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ alm.date_requested|time }}</p>
+                        <p class="text-sm text-secondary mb-0">{{ alm.date_requested|date }}</p>
+
+                    </td>
+
+                    <td class="align-middle text-center">
+                      
+                      {% if alm.status == 'Pending' %}
+                      <span class="badge badge-pill badge-md bg-gradient-warning">{{ alm.status}}</span>
+
+                      {% elif alm.status == 'Complete' %}
+                      <span class="badge badge-pill badge-md bg-gradient-success">{{ alm.status}}</span>
+                      {% endif %}
+               
+
+                    </td>
+
+                    <td class="align-middle">
+
+                    
+
+                      {% if alm.status == 'Pending' %}
+                      <a href="#" class="mx-2 process-button approve-link" data-request-id="{{ alm.id }}"
+                      data-bs-toggle="modal" data-bs-target="#uploadModal">
+                       <i class="fas fa-check-circle text-secondary" aria-hidden="true"></i>
+                      </a>
+
+                      <a href="#" class="mx-2 process-button approve-link" data-request-id="{{ alm.id }}"
+                      data-bs-toggle="tooltip" data-bs-title="Decline request">
+                      <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
+                      </a>
+
+
+                      {% else %}
+                      {% endif %}
+
+                 
+                   
+
+               
+                    </td>
+
+                  </tr>
+                  {% endfor %}
+          
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+
+
+
+  </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Requested File</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="fileUploadForm" method="POST" action="{% url 'approve-request' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="mb-3">
+                    <input type="hidden" name="request_id" id="request_id">
+                    <label for="fileInput" class="form-label">Choose file</label>
+                    <input type="file" class="form-control" id="fileInput" name="file">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="submit-button">Upload</button>
+            </div>
+        </form>
+      </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+
+<script>
+    let table = new DataTable('#alumni_table')
+</script>
+
+<script>
+
+
+  // Handle click event on approve links to populate modal with request ID
+  document.querySelectorAll('.approve-link').forEach(link => {
+      link.addEventListener('click', function(event) {
+          event.preventDefault();
+          const requestId = this.getAttribute('data-request-id');
+          document.getElementById('request_id').value = requestId;
+          // You can use the request ID for further processing if needed
+          console.log('Request ID:', requestId);
+      });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+      $('#fileUploadForm').submit(function(event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Show loading spinner
+          Swal.fire({
+              title: 'Uploading file...',
+              html: '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Please wait while we processing request...</p>',
+           
+              allowOutsideClick: false,
+              showConfirmButton: false, 
+              onBeforeOpen: () => {
+                  Swal.showLoading();
+              }
+          });
+
+          // Submit the form via AJAX
+          var formData = new FormData(this);
+          $.ajax({
+              url: $(this).attr('action'),
+              type: $(this).attr('method'),
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                  // Close loading spinner
+                  Swal.close();
+
+                  // Show success message
+                  Swal.fire({
+                      title: 'File uploaded!',
+                      text: response.message,
+                      icon: 'success',
+                      confirmButtonColor: '#3085d6'
+                  }).then(() => {
+                    
+                      window.location.href = '/diploma/';
+                  });
+              },
+              error: function(xhr, status, error) {
+                  // Close loading spinner
+                  Swal.close();
+
+                  // Show error message
+                  Swal.fire({
+                      title: 'Error!',
+                      text: 'Failed to upload file.',
+                      icon: 'error',
+                      confirmButtonColor: '#3085d6'
+                  });
+              }
+          });
+
+          return false; // Prevent normal form submission
+      });
+  });
+</script>
+
+{% endblock %}

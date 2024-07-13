@@ -1,0 +1,341 @@
+<!--
+=========================================================
+* Argon Dashboard 2 - v2.0.4
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    NJ Valdez | Alumni
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="/staticassets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="/static/assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+</head>
+
+<body class="">
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+      <div class="col-12">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
+          <div class="container-fluid">
+            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="/">
+              NJ Valdez Colleges Foundation
+            </a>
+            <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon mt-2">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navigation">
+              <ul class="navbar-nav mx-auto">
+
+                {% if request.user.is_authenticated %}
+
+                <li class="nav-item">
+                    <a href="" class="btn btn-md mb-0 me-2 mb-1 btn-primary" data-bs-toggle="modal" data-bs-target="#modal-job"> <i class="fas fa-upload opacity-6 text-white me-1"></i>
+                      Post a Job</a>
+                </li>
+
+                <li class="nav-item">
+                  
+                    <a href="" class="btn btn-md mb-0 me-2 btn-primary" data-bs-toggle="modal" data-bs-target="#modal-request"> <i class="fas fa-paper-plane opacity-6 text-white me-1"></i>
+                      Request Document</a>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'register' %}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Register Account
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{% url 'login' %}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Login
+                  </a>
+                </li>
+
+                {% endif %}
+
+
+              </ul>
+              <ul class="navbar-nav d-lg-block">
+                {% if request.user.is_authenticated %}
+
+                <li class="nav-item">
+                  <a href="{% url 'alumni-profile' %}" target="_blank" class="text-secondary me-xl-4 me-4">
+                      
+                      <i class="fas fa-user opacity-6 text-dark me-1"></i>
+                      {{ request.user }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-secondary me-xl-4 me-4">
+                      
+                        <i class="fa fa-sign-out opacity-6 text-dark me-1"></i>
+                        Sign Out
+                    </a>
+
+              </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
+                        <span class="text-lg fab fa-facebook"></span>
+                      </a>
+                      <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
+                        <span class="text-lg fab fa-twitter"></span>
+                      </a>
+                      <a href="javascript:;" target="_blank" class="text-secondary me-xl-4 me-4">
+                        <span class="text-lg fab fa-instagram"></span>
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- End Navbar -->
+      </div>
+    </div>
+  </div>
+  <main class="main-content mt-0">
+    <section>
+      <div class="page-header min-vh-100">
+        <main class="container mt-4">
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-gradient-secondary">
+              <div class="col-md-6 px-0 mt-4">
+                <h1 class="display-4 fst-italic">Always Look Where You Came From.</h1>
+                <p class="lead my-3">NJ Valdez Colleges Foundation | Villasis</p>
+              </div>
+            </div>
+          
+          
+            <div class="row g-5">
+              <div class="col-md-8">
+                {% if messages %}
+                  {% for msg in messages %}
+                  <div class="alert alert-success" role="alert">
+                    {{ msg }}
+                  </div>
+                  {% endfor %}
+                {% endif %}
+
+               
+                <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                  Job Posts from Alumnis
+                </h3> 
+
+        
+                
+          
+
+                <div class="row mt-lg-4 mt-2">
+                    {% for job in jobs %}
+                    {% if job.verified %}
+                    <div class="col-md-12">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                          <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-primary">{{ job.company_name}}</strong>
+                            <h3 class="mb-0"><a href="#">{{ job.job_title}}</a></h3>
+                            <div class="mb-1 text-muted">Posted {{ job.date_created|timesince }} ago</div>
+                            <p class="card-text mb-auto">{{ job.description }}</p>
+                          </div>
+                          <div class="col-auto d-none d-lg-block">
+                            <img class="bd-placeholder-img p-4" width="200" src="/static/assets/img/job.jpg" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+                  
+                          </div>
+                                          
+                          <hr class="horizontal dark">
+                          <div class="row">
+                              <div class="col-6 p-2">
+                      
+                          
+                              <p class="text-secondary text-capitalize text-sm font-weight-bold mb-0">Posted by: {{ job.posted_by.user.first_name }} {{ job.posted_by.user.last_name}}</p>
+                              </div>
+                              <div class="col-6 text-end p-2">
+                              
+                              <p class="text-secondary text-sm font-weight-bold mb-0">{{ job.company_email }}</p>
+                              </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    {% endif %}
+           
+                    
+                    {% endfor %}
+
+                </div>
+                
+
+        
+          
+              </div>
+          
+              <div class="col-md-4">
+                <div class="position-sticky" style="top: 2rem;">
+                  <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="fst-italic">About</h4>
+                    <p class="mb-0">NJ Valdez Colleges Foundation (NJVCF) is a private, higher educational institution in Villasis, Pangasinan. It offers bachelor's degree courses in Information Technology, Teacher Education, Accountancy, and Business Administration. These programs are registered with the Commission on Higher Education (CHED), and students enrolled in these programs can now avail of financial assistance through the Unified Financial Assistance System for Tertiary Education Act (UNIFAST). Also available in the NJVCF are TESDA courses in Caregiving, Health Care Services, and Shielded Metal Arc Welding.</p>
+                  </div>
+          
+
+          
+                  <div class="p-4">
+                    <h4 class="fst-italic">Elsewhere</h4>
+                    <ol class="list-unstyled">
+                        <li><a href="https://www.linkedin.com/school/nj-valdez-colleges-foundation/">LinkedIn</a></li>
+                        <li><a href="https://www.facebook.com/people/NJ-Valdez-Colleges-Foundation/100063974440856/">Facebook</a></li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          </main>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+
+  <div class="col-md-4">
+    <div class="modal fade" id="modal-job" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+      <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title" id="modal-title-notification">Post a Job</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+            <form action="{% url 'post-job' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Sector</label>
+                                <select class="form-control" name="sector" id="exampleFormControlSelect1">
+                                  <option value="Government">Government</option>
+                                  <option value="Non-Government">Non-Government</option>
+                                </select>
+                              </div>
+
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Company Name</label>
+                                <input class="form-control"  name="company_name" required type="text" id="example-text-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Company Email</label>
+                                <input class="form-control" name="company_email" required type="email" id="example-text-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Job Title</label>
+                                <input class="form-control" name="job_title" required type="text" id="example-text-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Job Description</label>
+                                <textarea class="form-control" name="description" required id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                        
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-white">Post Job</button>
+                    <button type="button" class="btn text-danger ml-auto" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="modal fade" id="modal-request" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+      <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title" id="modal-title-notification">Request Document </h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <form action="{% url 'request-file' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Document</label>
+                        <select class="form-control" name="request_" id="exampleFormControlSelect1">
+                          <option value="Diploma">Diploma</option>
+                          <option value="Transcript of Records">Transcript of Record</option>
+                        </select>
+                      </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Please state your reason</label>
+                        <textarea class="form-control" name="reason" required id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-white">Send request</button>
+                <button type="button" class="btn text-danger ml-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--   Core JS Files   -->
+
+  {% include 'includes/scripts.html' %}
+</body>
+
+</html>

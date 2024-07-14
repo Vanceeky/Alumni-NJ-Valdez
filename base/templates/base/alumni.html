@@ -20,96 +20,79 @@
                     <h6 class="mb-0">Alumni</h6>
                     </div>
                     <div class="col-6 text-end">
-    
+                      <a href="#" id="export_csv" class="btn btn-gradient-info">Generate Report</a>
+
                     </div>
                 </div>
             </div>
             <div class="table-responsive p-2">
-              <table class="table align-items-center mb-0" id="alumni_table">
+              <table class="table align-items-center mb-0" id="alumni_table_dashboard">
                 <thead>
-                  <tr>
-                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Name</th>
-                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">Contact</th>
-                    <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">Course</th>
-                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Employment Status</th>
-                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Proof of Alumnus</th>
-                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Date registered</th>
-                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">Status</th>
-                    <th class="text-secondary opacity-7"></th>
-                  </tr>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Course</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employment Status</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Proof of Alumnus</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date registered</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                        <th class="text-secondary opacity-7"></th>
+                    </tr>
                 </thead>
                 <tbody>
-                  {% for alm in alumni %}
-                  <tr>
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                        <div>
-                          <img src="{{ alm.avatar.url }}" class="avatar avatar-sm me-3">
-                        </div>
-                        <div class="d-flex flex-column justify-content-center">
-                          <a href=""><p class="mb-0 text-md text-capitalize">{{ alm.user.last_name }}, {{ alm.user.first_name}} ( {{ alm.student_number }})</p></a>
-                        </div>
-                      </div>
-                    </td>
+                    {% for alm in alumni %}
+                    <tr>
+                        <td>
+                            <div class="d-flex px-2 py-1">
+                                <div>
+                                    <img src="{{ alm.avatar.url }}" class="avatar avatar-sm me-3">
+                                </div>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="mb-0 text-xs text-capitalize">{{ alm.user.last_name }}, {{ alm.user.first_name}} ( {{ alm.student_number }})</h6>
+                                    <p class="text-xs text-secondary mb-0">{{ alm.user.email }}</p>
+                                </div>
+                            </div>
+                        </td>
 
-                    <td>
-                        <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ alm.phone_number }}</p>
-                        <p class="text-sm text-secondary mb-0">{{ alm.user.email }}</p>
-                      </td>
+                        <td>
+                            <p class="text-xs font-weight-bold mb-0 text-capitalize">{{ alm.course }}</p>
+                            <p class="text-xs text-secondary mb-0">Batch: {{ alm.batch }}</p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <p class="text-xs font-weight-bold mb-0 text-capitalize">{{ alm.employment }}</p>
+                        </td>
 
-                    <td>
-                      <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ alm.course }}</p>
-                      <p class="text-sm text-secondary mb-0">Batch: {{ alm.batch }}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ alm.employment }}</p>
-                    </td>
+                        <td class="text-center">
+                            <a href="{{ alm.proof.url }}" target="_blank"><p class="text-xs font-weight-bold mb-0 text-capitalize">view</p></a>
+                        </td>
 
-                    <td class="text-center">
-                      <a href="{{ alm.proof.url }}" target="_blank"><p class="text-sm font-weight-bold mb-0 text-capitalize">view</p></a>
-                    </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{ alm.date_created|date }}</span>
+                        </td>
 
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-sm font-weight-bold">{{ alm.date_created|date }}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      {% if alm.user.is_active %}
-                      <span class="badge badge-pill badge-md bg-gradient-success">Active</span>
-                      {% else %}
-                      <span class="badge badge-pill badge-md bg-gradient-warning">Not Active</span>
-
-                      {% endif %}
-                      
-
-                    </td>
-                    <td class="align-middle">
-
-                      {% if alm.user.is_active %}
-
-                      {% else %}
-
-                      <a href="#" class="mx-2 process-button approve-request" data-request-id="{{ alm.id }}"
-                      data-bs-toggle="tooltip" data-bs-title="Approve request">
-                      <i class="fas fa-check-circle text-secondary" aria-hidden="true"></i>
-                      </a>
-
-                      <a href="#" class="mx-2 process-button approve-link" data-request-id="{{ ip.id }}"
-                      data-bs-toggle="tooltip" data-bs-title="Decline request">
-                      <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
-                      </a>
-
-                      {% endif %}
-
-                   
-
-               
-                    </td>
-
-                  </tr>
-                  {% endfor %}
-          
+                        <td class="align-middle text-center">
+                            {% if alm.user.is_active %}
+                            <span class="badge badge-pill badge-md bg-gradient-success">Active</span>
+                            {% else %}
+                            <span class="badge badge-pill badge-md bg-gradient-warning">Not Active</span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            {% if alm.user.is_active %}
+                            <!-- Actions for active users -->
+                            {% else %}
+                            <!-- Actions for non-active users -->
+                            <a href="#" class="mx-2 process-button approve-request" data-request-id="{{ alm.id }}" data-bs-toggle="tooltip" data-bs-title="Approve request">
+                                <i class="fas fa-check-circle text-secondary" aria-hidden="true"></i>
+                            </a>
+                            <a href="#" class="mx-2 process-button approve-link" data-request-id="{{ alm.id }}" data-bs-toggle="tooltip" data-bs-title="Decline request">
+                                <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
-              </table>
+            </table>
             </div>
         </div>
     </div>
@@ -124,7 +107,7 @@
 {% block javascripts %}
 
 <script>
-    let table = new DataTable('#alumni_table')
+    let table = new DataTable('#alumni_table_dashboard')
 </script>
 
 
@@ -193,6 +176,71 @@
     });
   });
 </script>
+
+
+<script>
+  // Function to convert data into CSV format
+  function convertToCSV(dataArray) {
+      const header = ["Name", "Course", "Employment Status", "Date registered", "Status"];
+      const rows = dataArray.map(item => {
+          return [
+              `${item.last_name}, ${item.first_name} (${item.student_number})`,
+              item.course,
+              item.employment,
+              item.date_created,
+              item.is_active ? "Active" : "Not Active"
+          ];
+      });
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += header.join(",") + "\n";
+      rows.forEach(row => {
+          csvContent += row.join(",") + "\n";
+      });
+
+      return encodeURI(csvContent);
+  }
+
+  // Function to download CSV file
+  function downloadCSV(dataArray) {
+      const csvData = convertToCSV(dataArray);
+      const link = document.createElement("a");
+      link.setAttribute("href", csvData);
+      link.setAttribute("download", "alumni_report.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  }
+
+  // Event listener for export CSV button click
+  document.getElementById('export_csv').addEventListener('click', function() {
+      const alumniData = [];
+
+      // Collect data from table rows
+      const tableRows = document.querySelectorAll("#alumni_table_dashboard tbody tr");
+      tableRows.forEach(row => {
+          const name = row.querySelector("h6").textContent.trim();
+          const course = row.querySelectorAll("td")[1].querySelector(".font-weight-bold").textContent.trim();
+          const employmentStatus = row.querySelectorAll("td")[2].querySelector(".font-weight-bold").textContent.trim();
+          const dateRegistered = row.querySelectorAll("td")[4].querySelector(".font-weight-bold").textContent.trim();
+          const status = row.querySelectorAll("td")[5].querySelector(".badge").textContent.trim();
+
+          alumniData.push({
+              last_name: name.split(',')[0],
+              first_name: name.split(',')[1].split(' ')[0],
+              student_number: name.split(' ')[1].slice(1, -1),
+              course: course,
+              employment: employmentStatus,
+              date_created: dateRegistered,
+              is_active: status === "Active" ? true : false
+          });
+      });
+
+      // Call function to download CSV with gathered data
+      downloadCSV(alumniData);
+  });
+</script>
+
 
 
 {% endblock %}

@@ -18,7 +18,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                     <h6 class="mb-0">Alumni Requests</h6>
 
-                    <a href="" class="btn btn-md bg-gradient-info">Approved requests</a>
+                    <button class="btn btn-gradient-info" id="generate_report_button">Generate Report</button>
                     </div>
                    
                 </div>
@@ -232,6 +232,77 @@
       });
   });
 </script>
+
+<script>
+  // Function to convert data into CSV format
+  function convertToCSV(dataArray) {
+      const headers = ["Alumni", "File request", "Contact", "Course", "Date requested", "Status"];
+      const rows = dataArray.map(item => {
+          return [
+              `${item.name} (${item.student_number})`,
+              item.file_request,
+              `${item.phone_number}, ${item.email}`,
+              `${item.course}, Batch: ${item.batch}`,
+              item.date_requested,
+              item.status
+          ];
+      });
+  
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += headers.join(",") + "\n";
+      rows.forEach(row => {
+          csvContent += row.join(",") + "\n";
+      });
+  
+      return encodeURI(csvContent);
+  }
+  
+  // Function to download CSV file
+  function downloadCSV(dataArray) {
+      const csvData = convertToCSV(dataArray);
+      const link = document.createElement("a");
+      link.setAttribute("href", csvData);
+      link.setAttribute("download", "alumni_requests.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  }
+  
+  // Event listener for generate report button click
+  document.getElementById('generate_report_button').addEventListener('click', function() {
+      const alumniData = [];
+  
+      // Collect data from table rows
+      const tableRows = document.querySelectorAll("#alumni_table tbody tr");
+      tableRows.forEach(row => {
+          const name = row.querySelector("p.text-md.text-capitalize").textContent.trim();
+          const studentNumber = name.match(/\(([^)]+)\)/)[1]; // Extract student number
+          const fileRequest = row.querySelector("td:nth-child(2) p.text-md.font-weight-bold").textContent.trim();
+          const phoneNumber = row.querySelector("td:nth-child(3) p.text-sm.font-weight-bold").textContent.trim();
+          const email = row.querySelector("td:nth-child(3) p.text-sm.text-secondary").textContent.trim();
+          const course = row.querySelector("td:nth-child(4) p.text-sm.font-weight-bold").textContent.trim();
+          const batch = row.querySelector("td:nth-child(4) p.text-sm.text-secondary").textContent.trim().replace("Batch: ", "");
+          const dateRequested = row.querySelector("td:nth-child(5) p.text-sm.font-weight-bold").textContent.trim();
+          const status = row.querySelector("td:nth-child(6) .badge").textContent.trim();
+  
+          alumniData.push({
+              name: name.split(' (')[0],
+              student_number: studentNumber,
+              file_request: fileRequest,
+              phone_number: phoneNumber,
+              email: email,
+              course: course,
+              batch: batch,
+              date_requested: dateRequested,
+              status: status
+          });
+      });
+  
+      // Call function to download CSV with gathered data
+      downloadCSV(alumniData);
+  });
+  </script>
+  
 
 
 

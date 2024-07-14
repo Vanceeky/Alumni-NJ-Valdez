@@ -14,7 +14,7 @@ from django.contrib.messages import get_messages
 from django.core.exceptions import PermissionDenied
 
 from django.http import JsonResponse
-from .decorators import redirect_if_authenticated
+from .decorators import redirect_if_authenticated, staff_required
 
 
 
@@ -183,31 +183,38 @@ def profile(request):
 
 
 @login_required(login_url='login')
+@staff_required
 def dashboard(request):
-    alumni = Alumni.objects.all()
-    tor = Request.objects.filter(file_type = 'Transcript of Records')
-    diploma = Request.objects.filter(file_type = 'Diploma')
-    jobs = Job.objects.all()
+    if request.user.is_staff:
+        alumni = Alumni.objects.all()
+        tor = Request.objects.filter(file_type = 'Transcript of Records')
+        diploma = Request.objects.filter(file_type = 'Diploma')
+        jobs = Job.objects.all()
 
-    context = {
-        'alumni': alumni,
-        'tor': tor,
-        'diploma': diploma,
-        'jobs': jobs,
-        'tor_pending': tor.filter(status = 'Pending'),
-        'diploma_pending': diploma.filter(status = 'Pending'),
-        'job_pending': jobs.filter(verified = False)
-    }
-    return render(request, 'base/dashboard.html', context)
+        context = {
+            'alumni': alumni,
+            'tor': tor,
+            'diploma': diploma,
+            'jobs': jobs,
+            'tor_pending': tor.filter(status = 'Pending'),
+            'diploma_pending': diploma.filter(status = 'Pending'),
+            'job_pending': jobs.filter(verified = False)
+        }
+        return render(request, 'base/dashboard.html', context)
+    else:
+        return redirect('index')
 
 @login_required(login_url='login')
+@staff_required
 def alumni(request):
+    
     alumni = Alumni.objects.all()
     context = {
         'alumni': alumni
     }
     return render(request, 'base/alumni.html', context)
 @login_required(login_url='login')
+@staff_required
 def transcript(request):
     requests_ = Request.objects.filter(file_type = 'Transcript of Records')
 
@@ -216,6 +223,7 @@ def transcript(request):
     }
     return render(request, 'base/transcript.html', context)
 @login_required(login_url='login')
+@staff_required
 def diploma(request):
     requests_ = Request.objects.filter(file_type = 'Diploma')
 
@@ -224,6 +232,7 @@ def diploma(request):
     }
     return render(request, 'base/diploma.html', context)
 @login_required(login_url='login')
+@staff_required
 def jobs(request):
     jobs = Job.objects.all()
     context = {

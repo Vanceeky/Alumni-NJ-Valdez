@@ -145,3 +145,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jinmori3500@gmail.com'
 EMAIL_HOST_PASSWORD = 'rajv cjah vpng hqlm'
 EMAIL_PORT = 587
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Alumni -NJ Valdez College Foundation",
+    "site_header": "Alumni -NJ Valdez College Foundation",
+    "site_brand": "Alumni - NJ Valdez",
+}

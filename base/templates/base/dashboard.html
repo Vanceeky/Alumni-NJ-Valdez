@@ -114,7 +114,7 @@
                     <h6 class="mb-0">Alumni</h6>
                     </div>
                     <div class="col-6 text-end">
-    
+                      <button class="btn btn-gradient-info" id="generate_report_button">Generate Report</button>
                     </div>
                 </div>
             </div>
@@ -195,6 +195,7 @@
                     </td>
 
                   </tr>
+                  
                   {% endfor %}
           
                 </tbody>
@@ -270,6 +271,77 @@
 
 <script>
   let table = new DataTable('#alumni_table_dashboard')
+
+</script>
+
+<script>
+  // Function to convert data into CSV format
+  function convertToCSV(dataArray) {
+    const header = ["Name", "Course", "Employment Status", "Proof of Alumnus", "Date registered", "Status"];
+    const rows = dataArray.map(item => {
+      return [
+        `${item.last_name}, ${item.first_name} (${item.student_number})`,
+        item.course,
+        item.employment,
+        item.proof_url,
+        item.date_created,
+        item.is_active ? "Active" : "Not Active"
+      ];
+    });
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += header.join(",") + "\n";
+    rows.forEach(row => {
+      csvContent += row.join(",") + "\n";
+    });
+
+    return encodeURI(csvContent);
+  }
+
+   // Function to download CSV file
+   function downloadCSV(dataArray) {
+    const csvData = convertToCSV(dataArray);
+    const link = document.createElement("a");
+    link.setAttribute("href", csvData);
+    link.setAttribute("download", "alumni_report.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Function to gather data from table and initiate download
+  function generateReport() {
+    const alumniData = [];
+    const tableRows = document.querySelectorAll("#alumni_table_dashboard tbody tr");
+
+    tableRows.forEach(row => {
+      const name = row.querySelector("h6").textContent.trim();
+      const course = row.querySelectorAll("td")[1].querySelector(".font-weight-bold").textContent.trim();
+      const employmentStatus = row.querySelectorAll("td")[2].querySelector(".font-weight-bold").textContent.trim();
+      const proofOfAlumnus = row.querySelectorAll("td")[3].querySelector("a").getAttribute("href");
+      const dateRegistered = row.querySelectorAll("td")[4].querySelector(".font-weight-bold").textContent.trim();
+      const status = row.querySelectorAll("td")[5].querySelector(".badge").textContent.trim();
+
+      alumniData.push({
+        last_name: name.split(',')[0],
+        first_name: name.split(',')[1].split(' ')[0],
+        student_number: name.split(' ')[1].slice(1, -1),
+        course: course,
+        employment: employmentStatus,
+        proof_url: proofOfAlumnus,
+        date_created: dateRegistered,
+        is_active: status === "Active" ? true : false
+      });
+    });
+
+    // Call function to download CSV with gathered data
+    downloadCSV(alumniData);
+  }
+
+  // Event listener for generating report button click
+  document.getElementById('generate_report_button').addEventListener('click', function() {
+    generateReport();
+  });
 
 </script>
 

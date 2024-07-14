@@ -8,17 +8,51 @@ from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.messages import get_messages
 # Create your views here.
 from django.core.exceptions import PermissionDenied
 
 from django.http import JsonResponse
+from .decorators import redirect_if_authenticated
 
 
+
+from twilio.rest import Client
+
+
+
+account_sid = 'ACcc2543589bc9989478d117aa1772aeca'
+auth_token = '35424683da5f91014950165839420196'
+client = Client(account_sid, auth_token)
+
+
+def send_sms(body):
+    try:
+        client = Client(account_sid, auth_token)
+
+        message = client.messages.create(
+        from_='+12513194915',
+        to='+639913226415',
+        body = body
+        )
+        
+        print(message.sid)
+
+        return message
+
+    except Exception as e:
+        print(f"Error sending SMS: {str(e)}")
+        return None
+
+
+
+
+@redirect_if_authenticated
 def login_page(request):
     return render(request, 'base/login.html')
 
-
+@redirect_if_authenticated
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -45,8 +79,10 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
+
     return redirect('login')
 
+@redirect_if_authenticated
 def register_page(request):
     if request.method == 'POST':
         username = request.POST.get('student_number')
@@ -94,6 +130,8 @@ def register_page(request):
 
             send_mail(subject, message, from_email, to_email)
 
+            send_sms('New request waiting for approval!')
+           
             messages.success(request, 'Registration successful. Please check your email for confirmation.')
             return redirect('register')  # Redirect to a success page after registration
 
@@ -112,6 +150,7 @@ def index(request):
     return render(request, 'base/index.html', context)
 
 
+@login_required(login_url='login')
 def alumni_profile(request):
     alumni = get_object_or_404(Alumni, user=request.user)
     requests_ = Request.objects.filter(alumni = alumni)
@@ -121,6 +160,7 @@ def alumni_profile(request):
     }
     return render(request, 'base/alumni_profile.html', context)
 
+@login_required(login_url='login')
 def edit_avatar(request):
     alumni = get_object_or_404(Alumni, user=request.user)
 
@@ -131,7 +171,7 @@ def edit_avatar(request):
 
     return redirect('alumni-profile')
 
-
+@login_required(login_url='login')
 def profile(request):
     user = User.objects.get(username = request.user)
     
@@ -142,6 +182,7 @@ def profile(request):
 
 
 
+@login_required(login_url='login')
 def dashboard(request):
     alumni = Alumni.objects.all()
     tor = Request.objects.filter(file_type = 'Transcript of Records')
@@ -159,13 +200,14 @@ def dashboard(request):
     }
     return render(request, 'base/dashboard.html', context)
 
+@login_required(login_url='login')
 def alumni(request):
     alumni = Alumni.objects.all()
     context = {
         'alumni': alumni
     }
     return render(request, 'base/alumni.html', context)
-
+@login_required(login_url='login')
 def transcript(request):
     requests_ = Request.objects.filter(file_type = 'Transcript of Records')
 
@@ -173,7 +215,7 @@ def transcript(request):
         'tor': requests_
     }
     return render(request, 'base/transcript.html', context)
-
+@login_required(login_url='login')
 def diploma(request):
     requests_ = Request.objects.filter(file_type = 'Diploma')
 
@@ -181,7 +223,7 @@ def diploma(request):
         'diploma' : requests_
     }
     return render(request, 'base/diploma.html', context)
-
+@login_required(login_url='login')
 def jobs(request):
     jobs = Job.objects.all()
     context = {
@@ -190,7 +232,7 @@ def jobs(request):
     return render(request, 'base/jobs.html', context)
 
 
-
+@login_required(login_url='login')
 def post_job(request):
     alumni = Alumni.objects.get(user = request.user )
     if request.method == 'POST':
@@ -226,9 +268,11 @@ def post_job(request):
         to_email = [request.user.email]
 
         send_mail(subject, message, from_email, to_email)
-
+        send_sms('New request waiting for approval!')
 
         return redirect('index') 
+    
+@login_required(login_url='login')    
 def request_file(request):
     alumni = Alumni.objects.get(user=request.user)
 
@@ -266,16 +310,18 @@ def request_file(request):
         to_email = [alumni.user.email]
 
         send_mail(subject, message, from_email, to_email)
+        send_sms('New request waiting for approval!')
 
     return redirect('index')
 
+@login_required(login_url='login')
 def approve_user(request, request_id):
     alumni = Alumni.objects.get(id = request_id )
     alumni.user.is_active = True
     alumni.user.save()
 
         # Email notification content
-    subject = 'Lyceum Account Activated'
+    subject = 'NJ Valdez Alumni Account Activated'
     message = f"""
     Hi {alumni.user.first_name} {alumni.user.last_name},
 
@@ -304,6 +350,7 @@ def approve_user(request, request_id):
     )
     return redirect('dashboard')
 
+@login_required(login_url='login')
 def approve_job(request, request_id):
     job = Job.objects.get(id = request_id )
     job.verified = True
@@ -331,7 +378,7 @@ def approve_job(request, request_id):
     return redirect('jobs')
 
 
-
+@login_required(login_url='login')
 def approve_request(request):
     if request.method == 'POST':
         request_id = request.POST.get('request_id')
